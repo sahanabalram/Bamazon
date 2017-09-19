@@ -15,14 +15,15 @@ var connection = mysql.createConnection({
 });
 
 // connect to mysql server
-
 connection.connect(function (error) {
     if (error) throw error;
     console.log(error);
     // run the allProducts function to display all the products that are on sale
     allProducts();
     // run the bamazonStart function after the connection is made to prompt the user
-    // bamazonStart();
+    bamazonStart();
+    // end the MySQL connection
+    connection.end();
 });
 
 function allProducts() {
@@ -30,14 +31,30 @@ function allProducts() {
         for (var i = 0; i < products.length; i++) {
             console.log(products[i].item_id + " | " + products[i].product_name + " | " + products[i].department_name + " | " + products[i].price);
         }
-    })
+    });
+
 }
-/*function bamazonStart() {
-    inquirer.prompt(
-        {
-            message:"Which product(ID) would you like to buy ?",
+
+function bamazonStart() {
+    inquirer.prompt([{
+            message: "Please enter the ID of the product that you would you like to buy ?",
             type: "input",
             name: "productID"
-    }
-)
-} */
+       },
+        {
+            message: "How many units would you like to buy?",
+            type: "input",
+            name: "unitNumber"
+        },
+        {
+            message: "Would you like to place an order?",
+            type: "confirm",
+            name: "order"
+        },
+    ]).then(function (answers) {
+        if(answers.order === true){
+            console.log("Your order has been placed!!!");
+        }
+        console.log(answers);
+    });
+}
