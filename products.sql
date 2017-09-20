@@ -1,42 +1,29 @@
--- CREATE DATABASE bamazon_db;
 USE bamazon_db;
 
+ DROP TABLE products;
+
 CREATE TABLE products(
-item_id INTEGER(10),
-product_name VARCHAR(50),
-department_name VARCHAR(50),
-price INTEGER(10),
-stock_quantity INTEGER(10)
-);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(4578, " Echo Laundrey Detergent","Home Cleaning", 20.00, 50);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(4568, "Dove Deodrant","Personal Care", 10.00, 60);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(3988, " Bic Ball Point Pens","Stationery", 2.00, 100);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(1256, " White Board Marker","Stationery", 1.00, 150);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(6098, " Organic Banana","Fruits", .50, 20);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(7654, " Organic Strawberry","Fruits", 3.00, 10);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(1250, " Organic Cucumber","Vegetables", 2.00, 5);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(4891, "Box Of Pencils","Stationery", 1.50, 50);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(9080, "Printed T-shirt","Clothing", 20, 50);
-
-INSERT INTO products(item_id,product_name,department_name,price,stock_quantity)
-VALUES(7058, "Sarong","Clothing", 18, 50);
-
-SELECT * FROM products;
+ item_id INTEGER(2) PRIMARY KEY,
+ product_name VARCHAR(50),
+ department_name VARCHAR(50),
+ price DECIMAL(10,2),
+ stock_quantity INTEGER(2)
+ );
+ INSERT INTO products (item_id,product_name,department_name,price,stock_quantity)
+ VALUES(1,"iPhone","Electronics",1000,50),(2,"NoteBook","Stationery",10,150),
+ (3,"Samsung Galaxy 5","Electronics",899.99,200),(4,"Hungry Hippo","Board Games",10,150),
+ (5," Dolphin Puzzle","Board Games",5.50,120),(6,"MacBook Pro","Electronics",1200,140),
+ (7,"Frying Pan","Kitchen Items",10.30,110),(8,"Tea-Spoons","Kitchen Items",3.45,50),
+ (9,"Salt","Groceries",1.25,150),(10,"Sony Tv","Electronics",30.99,180);
+ 
+ SELECT * FROM products;
+ 
+ SELECT stock_quantity FROM products WHERE item_id = 10;
+ 
+ UPDATE products
+ SET stock_quantity = 20
+ WHERE item_id = 1;
+ 
+ UPDATE products 
+ SET stock_quantity = 1
+ WHERE item_id=1;
