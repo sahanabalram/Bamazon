@@ -22,7 +22,7 @@ CREATE TABLE products(
  SELECT stock_quantity FROM products WHERE item_id = 10;
  
  UPDATE products
- SET stock_quantity = 200
+ SET stock_quantity = 200, product_sales = 20
  WHERE item_id = 1;
  
  UPDATE products 
@@ -39,6 +39,30 @@ department_id INTEGER(10) PRIMARY KEY AUTO_INCREMENT,
 department_name VARCHAR(100),
 over_head_costs INTEGER(10)
 );
+
+select * from products;
+
+select * from departments;
+
+SELECT department_name , SUM(product_sales)
+FROM products
+GROUP BY department_name;
+
+
+SELECT departments.department_id,products.department_name,departments.over_head_costs
+FROM products
+INNER JOIN departments ON departments.department_id = products.department_name
+WHERE departments.department_name="Electronics"
+GROUP BY department_name;
+
+SELECT dpt.department_id,pdt.department_name,dpt.over_head_costs,pdt.product_sales, (pdt.product_sales-dpt.over_head_costs) as total_profit
+FROM
+(SELECT  department_name , sum(product_sales) as product_sales
+FROM products
+GROUP BY department_name) pdt
+INNER JOIN 
+(SELECT department_id,department_name, over_head_costs
+FROM departments) dpt ON pdt.department_name = dpt.department_name;
 
 INSERT INTO departments(department_name,over_head_costs)
 VALUES("Electronics",2000),("Board Game",9000),("Stationery",50000),("Kitchen Items",8000),("Groceries",7000);

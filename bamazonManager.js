@@ -1,17 +1,6 @@
-var mysql = require("mysql");
+var connection = require("./connection");
 var inquirer = require("inquirer");
 require("console.table");
-// create database connection
-var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-   // username
-    user: "root",
-    // password
-    password: process.env.MYSQL_PASSWORD,
-    // database name
-    database: "bamazon_db"
-});
 console.log("Welcome to the Manager application of Bamazon!!!");
 inquirer.prompt([{
     message: "Select an option to change the stock",
@@ -43,6 +32,7 @@ function viewProduct(connectionTerminate) {
         }
     });
 }
+
 function viewInventory(connectionTerminate) {
     var viewInventoryQuery = "SELECT * FROM products WHERE stock_quantity < 5";
     connection.query(viewInventoryQuery, function (error, products) {
@@ -55,13 +45,12 @@ function viewInventory(connectionTerminate) {
         } else {
             console.log("Inventory is Full");
         }
-
         if (connectionTerminate) {
             connection.end();
         }
     });
-
 }
+
 function addInventory() {
     // viewProduct();
     inquirer.prompt([{
@@ -106,18 +95,17 @@ function updateProductsDatabase(productID, quantity) {
 }
 
 function addNewProduct() {
-    inquirer.prompt([{
+    inquirer.prompt([
+        {
             message: "Enter the product name",
             type: "input",
             name: "enterProduct"
         },
-
         {
             message: "Enter the department name",
             type: "input",
             name: "enterDepartment"
         },
-
         {
             message: "Enter the price for the product",
             type: "input",
