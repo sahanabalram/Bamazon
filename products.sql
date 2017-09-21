@@ -25,5 +25,5 @@ CREATE TABLE products(
  WHERE item_id = 1;
  
  UPDATE products 
- SET stock_quantity = 1
- WHERE item_id=1;
+ SET stock_quantity = 100
+ WHERE item_id=3;

@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     // username
     user: "root",
     // password
-    password: "pappy123",
+    password: "MYSQL_PASSWORD",
     // database name
     database: "bamazon_db"
 });
@@ -30,9 +30,7 @@ connection.connect(function (error) {
 
 function allProducts() {
     connection.query("SELECT * FROM products", function (error, products) {
-        for (var i = 0; i < products.length; i++) {
-            console.log(products[i].item_id + " | " + products[i].product_name + " | " + products[i].department_name + " | " + products[i].price + " | " + products[i].stock_quantity);
-        }
+        console.table(products);
         bamazonStart();
     });
 
@@ -41,19 +39,28 @@ function allProducts() {
 
 function bamazonStart() {
     inquirer.prompt([{
-            message: "Please enter the ID of the product that you would you like to buy ?",
+            message: "Please enter the ID of the product that you would you like to buy [Quit Q] ?",
             type: "input",
             name: "productID"
-        },
-        {
-            message: "How many would you like to buy?",
-            type: "input",
-            name: "quantity"
         }
 
+
     ]).then(function (answers) {
-        console.log("Product ID:" + answers.productID, "Quantity:" + answers.quantity);
-        checkStockQuantity(answers.productID, answers.quantity);
+        if (answers.productID.toLowerCase() === "q") {
+            console.log("ending connection");
+            connection.end();
+            
+        } else {
+            inquirer.prompt([{
+                message: "How many would you like to buy?",
+                type: "input",
+                name: "quantity"
+            }]).then(function (answer1) {
+                checkStockQuantity(answers.productID, answer1.quantity);
+            });
+
+        }
+
     });
 }
 
@@ -61,13 +68,15 @@ function checkStockQuantity(productID, quantity) {
     var query = "SELECT stock_quantity FROM products WHERE item_id = " + productID;
     connection.query(query, function (error, stock_quantity) {
         if (error) throw error;
-        console.log(stock_quantity);
         if (stock_quantity[0].stock_quantity >= quantity) {
             updateProductsDatabase(productID, stock_quantity[0].stock_quantity - quantity);
         } else {
             console.log("Insufficient quantity!");
-            //connection.end();
+            // connection.end();
             bamazonStart();
+
+
+
         }
     });
 }
@@ -77,11 +86,14 @@ function updateProductsDatabase(productID, quantity) {
         " WHERE item_id = " + productID;
     connection.query(updateQuery, function (error, results, fields) {
         if (error) {
-            console.log("Insufficient quantity!");
+            // console.log("Insufficient quantity!");
+            // bamazonStart();
         } else {
             console.log("Successfully placed your order");
+            console.log("----------------------------------");
             allProducts();
+            // connection.end();
         }
-        connection.end();
+
     });
 }
