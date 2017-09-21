@@ -5,8 +5,7 @@ require("console.table");
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
-
-    // username
+   // username
     user: "root",
     // password
     password: process.env.MYSQL_PASSWORD,
@@ -39,32 +38,30 @@ inquirer.prompt([{
 function viewProduct(connectionTerminate) {
     connection.query("SELECT * FROM products", function (error, products) {
         console.table(products);
-        if(connectionTerminate){
+        if (connectionTerminate) {
             connection.end();
         }
     });
 }
-
 function viewInventory(connectionTerminate) {
     var viewInventoryQuery = "SELECT * FROM products WHERE stock_quantity < 5";
     connection.query(viewInventoryQuery, function (error, products) {
-        if (error){
+        if (error) {
             console.log(error);
             throw error;
-        } 
-        if(products.length > 0){
+        }
+        if (products.length > 0) {
             console.table(products);
         } else {
             console.log("Inventory is Full");
         }
-        
-        if(connectionTerminate){
+
+        if (connectionTerminate) {
             connection.end();
         }
     });
-    
-}
 
+}
 function addInventory() {
     // viewProduct();
     inquirer.prompt([{
@@ -139,15 +136,14 @@ function addNewProduct() {
                 stock_quantity: answer.enterStock
             },
             function (error, response) {
-                if(error) {
+                if (error) {
                     console.log(error);
                     throw error;
-                } 
-                
+                }
+
                 console.table(response.affectedRows + "product has been inserted\n");
                 viewProduct(true);
             }
         );
     });
 }
-

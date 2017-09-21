@@ -47,7 +47,7 @@ function bamazonStart() {
 
     ]).then(function (answers) {
         if (answers.productID.toLowerCase() === "q") {
-            console.log("ending connection");
+            console.log("Good Bye");
             connection.end();
 
         } else {
@@ -65,11 +65,12 @@ function bamazonStart() {
 }
 
 function checkStockQuantity(productID, quantity) {
-    var query = "SELECT stock_quantity FROM products WHERE item_id = " + productID;
-    connection.query(query, function (error, stock_quantity) {
+    var query = "SELECT stock_quantity,price,product_sales FROM products WHERE item_id = " + productID;
+    connection.query(query, function (error, data) {
         if (error) throw error;
-        if (stock_quantity[0].stock_quantity >= quantity) {
-            updateProductsDatabase(productID, stock_quantity[0].stock_quantity - quantity);
+        if (data[0].stock_quantity >= quantity) {
+            var productSales = data[0].product_sales + (quantity * data[0].price);
+            updateProductsDatabase(productID, data[0].stock_quantity - quantity, productSales);
         } else {
             console.log("Insufficient quantity!");
             // connection.end();
@@ -78,9 +79,9 @@ function checkStockQuantity(productID, quantity) {
     });
 }
 
-function updateProductsDatabase(productID, quantity) {
+function updateProductsDatabase(productID, quantity, productSales) {
     var updateQuery = "UPDATE products SET stock_quantity = " + quantity +
-        " WHERE item_id = " + productID;
+        ", product_sales = " + productSales + " WHERE item_id = " + productID;
     connection.query(updateQuery, function (error, results, fields) {
         if (error) {
             // console.log("Insufficient quantity!");
