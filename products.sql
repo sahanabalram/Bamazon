@@ -68,3 +68,8 @@ INSERT INTO departments(department_name,over_head_costs)
 VALUES("Electronics",2000),("Board Game",9000),("Stationery",50000),("Kitchen Items",8000),("Groceries",7000);
 
 SELECT * FROM  departments;
+
+-- SELECT departments.department_id, departments.department_name,  
+--                             departments.over_head_costs, SUM(products.product_sales-departments.over_head_costs) AS total_profit
+--                             FROM departments LEFT JOIN products ON departments.department_name = 
+--                             products.department_name GROUP BY departments.department_id;

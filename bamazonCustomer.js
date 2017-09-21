@@ -42,12 +42,13 @@ function bamazonStart() {
 }
 
 function checkStockQuantity(productID, quantity) {
-    var query = "SELECT stock_quantity,price,product_sales FROM products WHERE item_id = " + productID;
+    var query = "SELECT stock_quantity,price,product_name,product_sales FROM products WHERE item_id = " + productID;
     connection.query(query, function (error, data) {
         if (error) throw error;
         if (data[0].stock_quantity >= quantity) {
             var productSales = data[0].product_sales + (quantity * data[0].price);
             updateProductsDatabase(productID, data[0].stock_quantity - quantity, productSales);
+            checkOut(productID, quantity, data[0].product_name, data[0].price);
         } else {
             console.log("Insufficient quantity!");
             // connection.end();
@@ -64,10 +65,17 @@ function updateProductsDatabase(productID, quantity, productSales) {
             // console.log("Insufficient quantity!");
             // bamazonStart();
         } else {
-            console.log("Successfully placed your order");
+            console.log("Successfully Placed your order");
             console.log("----------------------------------");
             allProducts();
             // connection.end();
         }
+    });
+}
+
+function checkOut(productID,quantity,name,price){
+    connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: quantity},{item_id: productID}],function(error,data){
+       if(error) throw error;
+       console.log("Your order of "+ quantity + " " + name + " for $ " + price * quantity + " has been placed ");
     });
 }
