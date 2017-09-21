@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     // username
     user: "root",
     // password
-    password: "MYSQL_PASSWORD",
+    password: process.env.MYSQL_PASSWORD,
     // database name
     database: "bamazon_db"
 });
@@ -49,7 +49,7 @@ function bamazonStart() {
         if (answers.productID.toLowerCase() === "q") {
             console.log("ending connection");
             connection.end();
-            
+
         } else {
             inquirer.prompt([{
                 message: "How many would you like to buy?",
@@ -74,9 +74,6 @@ function checkStockQuantity(productID, quantity) {
             console.log("Insufficient quantity!");
             // connection.end();
             bamazonStart();
-
-
-
         }
     });
 }
