@@ -1,7 +1,9 @@
 var connection = require("./connection");
 var inquirer = require("inquirer");
 require("console.table");
+console.log("-------------------------------------------------");
 console.log("Welcome to the Manager application of Bamazon!!!");
+console.log("-------------------------------------------------");
 inquirer.prompt([{
     message: "Select an option to change the stock",
     type: "list",
@@ -27,7 +29,7 @@ inquirer.prompt([{
 function viewProduct(connectionTerminate, callback) {
     connection.query("SELECT * FROM products", function (error, products) {
         console.table(products);
-        if(callback) callback();
+        if (callback) callback();
         if (connectionTerminate) {
             connection.end();
         }
@@ -73,7 +75,7 @@ function addInventory() {
                     connection.query(query, function (error, stock_quantity) {
                         var newInventory = parseInt(stock_quantity[0].stock_quantity) + parseInt(inventoryAdd.enterQuantity)
                         updateProductsDatabase(answer.enterID, newInventory);
-    
+
                     });
                 });
             }
@@ -89,18 +91,17 @@ function updateProductsDatabase(productID, quantity) {
             // console.log("Insufficient quantity!");
             // bamazonStart();
         } else {
+            console.log("--------------------------------------------");
             console.log("Successfully updated");
             console.log("----------------------------------");
             viewProduct(true);
-            // connection.end();
         }
 
     });
 }
 
 function addNewProduct() {
-    inquirer.prompt([
-        {
+    inquirer.prompt([{
             message: "Enter the product name",
             type: "input",
             name: "enterProduct"

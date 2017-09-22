@@ -2,7 +2,9 @@ var connection = require("./connection");
 var inquirer = require("inquirer");
 require("console.table");
 // create database connection
+console.log("--------------------------------------------");
 console.log("Welcome to Supervisor application of Bamazon");
+console.log("--------------------------------------------");
 
 inquirer.prompt([{
     message: "Select an option to either view or create a department",
@@ -77,7 +79,7 @@ function createNewDepartment() {
                 }
                 console.table(response.affectedRows + " department has been inserted\n");
 
-               departmentTable();
+                departmentTable();
             }
         );
     });
@@ -92,7 +94,6 @@ function departmentTable() {
             console.table(data);
 
         }
-        // connection.end();
     });
 
 }
