@@ -49,6 +49,7 @@ function viewProductSalesByDepartment() {
             throw error;
         }
         console.table(data);
+        // departmentTable();
         connection.end();
     });
 }
@@ -91,7 +92,7 @@ function departmentTable() {
             console.table(data);
 
         }
-        connection.end();
+        // connection.end();
     });
 
 }
