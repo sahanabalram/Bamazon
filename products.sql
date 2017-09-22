@@ -40,19 +40,9 @@ department_name VARCHAR(100),
 over_head_costs INTEGER(10)
 );
 
-select * from products;
-
-select * from departments;
 
 SELECT department_name , SUM(product_sales)
 FROM products
-GROUP BY department_name;
-
-
-SELECT departments.department_id,products.department_name,departments.over_head_costs
-FROM products
-INNER JOIN departments ON departments.department_id = products.department_name
-WHERE departments.department_name="Electronics"
 GROUP BY department_name;
 
 SELECT dpt.department_id,pdt.department_name,dpt.over_head_costs,pdt.product_sales, (pdt.product_sales-dpt.over_head_costs) as total_profit
@@ -69,7 +59,3 @@ VALUES("Electronics",2000),("Board Game",9000),("Stationery",50000),("Kitchen It
 
 SELECT * FROM  departments;
 
--- SELECT departments.department_id, departments.department_name,  
---                             departments.over_head_costs, SUM(products.product_sales-departments.over_head_costs) AS total_profit
---                             FROM departments LEFT JOIN products ON departments.department_name = 
---                             products.department_name GROUP BY departments.department_id;
