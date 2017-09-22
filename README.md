@@ -12,7 +12,7 @@ An online store application which helps customer to purchase products from the c
 ![screenshot of the  Bamazon Supervisor application](images/bamazonSupervisor.png) 
 
 ## Demo of Bamazon Application
-
+https://youtu.be/Ecar_07Td8c
 
  ## Developed using
 Server: Node.js
