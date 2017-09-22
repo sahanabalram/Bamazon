@@ -24,9 +24,10 @@ inquirer.prompt([{
     }
 });
 
-function viewProduct(connectionTerminate) {
+function viewProduct(connectionTerminate, callback) {
     connection.query("SELECT * FROM products", function (error, products) {
         console.table(products);
+        if(callback) callback();
         if (connectionTerminate) {
             connection.end();
         }
@@ -52,29 +53,32 @@ function viewInventory(connectionTerminate) {
 }
 
 function addInventory() {
-    // viewProduct();
-    inquirer.prompt([{
-        message: "Please Enter the ID for which the stock has to be added [Quit Q]",
-        type: "input",
-        name: "enterID"
-    }]).then(function (answer) {
-        if (answer.enterID.toLowerCase() === "q") {
-            connection.end();
-        } else {
-            inquirer.prompt([{
-                message: "Enter the quantity that has to be added to the stock",
-                type: "input",
-                name: "enterQuantity"
-            }]).then(function (inventoryAdd) {
-                var query = "SELECT stock_quantity FROM products WHERE item_id = " + answer.enterID;
-                connection.query(query, function (error, stock_quantity) {
-                    var newInventory = parseInt(stock_quantity[0].stock_quantity) + parseInt(inventoryAdd.enterQuantity)
-                    updateProductsDatabase(answer.enterID, newInventory);
+    viewProduct(false, inventoryPrompt);
 
+    function inventoryPrompt() {
+        inquirer.prompt([{
+            message: "Please Enter the ID for which the stock has to be added [Quit Q]",
+            type: "input",
+            name: "enterID"
+        }]).then(function (answer) {
+            if (answer.enterID.toLowerCase() === "q") {
+                connection.end();
+            } else {
+                inquirer.prompt([{
+                    message: "Enter the quantity that has to be added to the stock",
+                    type: "input",
+                    name: "enterQuantity"
+                }]).then(function (inventoryAdd) {
+                    var query = "SELECT stock_quantity FROM products WHERE item_id = " + answer.enterID;
+                    connection.query(query, function (error, stock_quantity) {
+                        var newInventory = parseInt(stock_quantity[0].stock_quantity) + parseInt(inventoryAdd.enterQuantity)
+                        updateProductsDatabase(answer.enterID, newInventory);
+    
+                    });
                 });
-            });
-        }
-    });
+            }
+        });
+    }
 }
 
 function updateProductsDatabase(productID, quantity) {
